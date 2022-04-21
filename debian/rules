@@ -20,7 +20,7 @@ ifneq ($(DEB_BUILD_MULTIARCH),$(DEB_HOST_MULTIARCH))
 endif
 
 build-arch: build
-build-indep: build build-doc-stamp
+build-indep: build
 build: build-stamp
 
 build-doc-stamp: build
@@ -76,9 +76,6 @@ get-doc:
 		http://www.pythonware.com/library/pil/handbook/index.htm
 
 install: build install-prereq $(PYVERS:%=install-python%) $(PY3VERS:%=install3-python%)
-	dh_installdocs -ppython-pil-doc #Docs/*
-	dh_installexamples -ppython-pil-doc
-
 	dh_installdocs -ppython-pil -ppython3-pil README.rst
 
 	: # Replace all '#!' calls to python with /usr/bin/python
@@ -198,12 +195,10 @@ install3-python%:
 
 # Build architecture-independent files here.
 # Pass -i to all debhelper commands in this target to reduce clutter.
-binary-indep: build build-doc-stamp install
+binary-indep: build install
 	dh_testdir -i
 	dh_testroot -i
 	dh_installdocs -i
-	dh_installdocs -ppython-pil-doc docs/_build/html
-	dh_sphinxdoc -ppython-pil-doc
 	dh_installexamples -i
 	dh_installchangelogs -i CHANGES.rst
 	dh_python2 -i
